@@ -9,4 +9,4 @@ class StoreAssignment(models.Model):
     assigned_At = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} with store {self.store.name}"
+        return f"{self.user.username} with {self.store.name}"
