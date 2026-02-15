@@ -12,6 +12,6 @@ services:
       - key: DEBUG
         value: "False"
     autoDeploy: true
-    preDeployCommand: python manage.py migrate
+    preDeployCommand: python manage.py makemigrations && python manage.py migrate
     plan: free
     deployHook: python manage.py migrate
