@@ -1,7 +1,7 @@
-from rest_framework import serializers
+from rest_framework import serializer
 from .models import Reconciliation
 
-class ReconciliationSerializer(serializers.ModelSerializer):
+class ReconciliationSerializer(serializer.ModelSerializer):
     class Meta:
         model = Reconciliation
         fields = "__all__"
