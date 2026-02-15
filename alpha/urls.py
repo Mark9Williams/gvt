@@ -21,6 +21,10 @@ from django.urls import path,include
 from store.views import StoreViewSet
 from product.views import ProductViewSet
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView
+)
 # from reconciliation.views import ReconciliationViewSet
 from storeassignment.views import StoreAssignmentViewSet
 from inventory.views import StoreInventoryViewSet,StockTransferViewSet
@@ -40,4 +44,6 @@ router.register(r'stocktransfer',StockTransferViewSet)
 urlpatterns = [
     path("api/",include(router.urls)),
     path('admin/', admin.site.urls),
+    path("api/token",TokenObtainPairView.as_view(), name = "token"),
+    path("api/refresh",TokenRefreshView.as_view(),name = "refresh")
 ]
