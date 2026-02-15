@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
+import dj_database_url
 from decouple import config
 from pathlib import Path
 import brand
@@ -32,7 +33,9 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG_VALUE")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'gvt-9tgn.onrender.com', 'localhost', '127.0.0.1'
+]
 
 
 
@@ -87,7 +90,6 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication"
     )
-
 }
 
 WSGI_APPLICATION = 'alpha.wsgi.application'
@@ -97,10 +99,13 @@ WSGI_APPLICATION = 'alpha.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default= os.environ.get("DATABASE_URL")
+    )
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 
