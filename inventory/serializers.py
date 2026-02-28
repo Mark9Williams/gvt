@@ -13,7 +13,7 @@ class StockTransferSerializer(serializers.ModelSerializer):
     class Meta:
             model = StockTransfer
             fields = "__all__"
-            read_only_fields = ["created_by", "created_at"]
+            #read_only_fields = ["created_by", "created_at"]
     # def create(self, validated_data):
     #         validated_data["created_by"] = self.context["request"].user
     #         return super().create(validated_data)
@@ -37,7 +37,7 @@ class StockTransferSerializer(serializers.ModelSerializer):
                 source_inventory.quantity -= quantity
                 source_inventory.save()
             # Add to destination store
-            dest_inventory, created = StoreInventory.objects.select_for_update().get(
+            dest_inventory = StoreInventory.objects.select_for_update().get(
             store=transfer.to_store,
             product=product,
             defaults={"quantity": 0}
