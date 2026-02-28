@@ -21,7 +21,7 @@ class StockTransferSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         with transaction.atomic():
             transfer = StockTransfer.objects.create(
-                created_by=user,
+                #created_by=user,
                 **validated_data
             )
             product = transfer.product
