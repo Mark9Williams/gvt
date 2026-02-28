@@ -5,6 +5,7 @@ from .serializers import UserSerializer, UserCreateSerializer, UserProfileSerial
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.generics import RetrieveUpdateAPIView
@@ -25,7 +26,7 @@ class UserProfileView(RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
     
-class LogoutView(ModelViewSet):
+class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self,request):
         try:
