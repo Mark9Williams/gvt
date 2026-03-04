@@ -20,7 +20,7 @@ class UserViewSet(ModelViewSet):
         return UserSerializer
     
 class UserProfileView(RetrieveUpdateAPIView):
-    queryset = UserProfileSerializer
+    serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
