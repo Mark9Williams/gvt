@@ -21,7 +21,7 @@ class StockTransferSerializer(serializers.ModelSerializer):
             product = transfer.product
             quantity = transfer.quantity
 
-            # Deduct from source store (if exists)
+            # Deduct from source store
             if transfer.source:
                 source_inventory = StoreInventory.objects.select_for_update().get(
                     store=transfer.source,
@@ -35,7 +35,7 @@ class StockTransferSerializer(serializers.ModelSerializer):
                 source_inventory.save()
 
             # Add to destination store
-            dest_inventory = StoreInventory.objects.select_for_update().get_or_create(
+            dest_inventory, created = StoreInventory.objects.select_for_update().get_or_create(
                 store=transfer.destin,
                 product=product,
                 defaults={"quantity": 0}
