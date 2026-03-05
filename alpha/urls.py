@@ -20,6 +20,7 @@ from brand.views import BrandViewSet
 from django.urls import path,include
 from store.views import StoreViewSet
 from product.views import ProductViewSet
+from sales.views import SaleViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -39,6 +40,7 @@ router.register(r'products',ProductViewSet)
 router.register(r'storeassignments',StoreAssignmentViewSet)
 router.register(r'storeinventory',StoreInventoryViewSet)
 router.register(r'stocktransfer',StockTransferViewSet)
+router.register(r'sales',SaleViewSet)
 # router.register(r'reconciliation',ReconciliationViewSet)
 
 urlpatterns = [
