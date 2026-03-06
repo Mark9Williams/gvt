@@ -5,37 +5,49 @@ from inventory.models import StockTransfer, StoreInventory
 
 def generate_reconciliation_report(store, start_date, end_date):
 
-    stock_added = StockTransfer.objects.filter(
-        destin=store,
-        created_at__date__range=(start_date, end_date)
-    ).values("product__name").annotate(
-        total_added=Sum("quantity")
-    )
+    report = []
 
-    stock_removed = StockTransfer.objects.filter(
-        source=store,
-        created_at__date__range=(start_date, end_date)
-    ).values("product__name").annotate(
-        total_removed=Sum("quantity")
-    )
+    inventory_items = StoreInventory.objects.filter(store=store)
 
-    sold = SaleItem.objects.filter(
-        sale__store=store,
-        sale__created_at__date__range=(start_date, end_date)
-    ).values("product__name").annotate(
-        total_sold=Sum("quantity")
-    )
+    for item in inventory_items:
 
-    current_inventory = StoreInventory.objects.filter(
-        store=store
-    ).values(
-        "product__name",
-        "quantity"
-    )
+        product = item.product
+        opening_stock = item.quantity
 
-    return {
-        "stock_added": stock_added,
-        "stock_removed": stock_removed,
-        "sold": sold,
-        "current_inventory": current_inventory
-    }
+        transfers_in = StockTransfer.objects.filter(
+            destin=store,
+            product=product,
+            transferred_At__date__range=(start_date, end_date)
+        ).aggregate(total=Sum("quantity"))["total"] or 0
+
+        transfers_out = StockTransfer.objects.filter(
+            source=store,
+            product=product,
+            transferred_At__date__range=(start_date, end_date)
+        ).aggregate(total=Sum("quantity"))["total"] or 0
+
+        sales = SaleItem.objects.filter(
+            sale__store=store,
+            product=product,
+            sale__created_at__date__range=(start_date, end_date)
+        ).aggregate(total=Sum("quantity"))["total"] or 0
+
+        expected_stock = opening_stock + transfers_in - transfers_out - sales
+
+        actual_stock = item.quantity
+
+        variance = actual_stock - expected_stock
+
+        report.append({
+            "product_id": product.id,
+            "product_name": product.name,
+            "opening_stock": opening_stock,
+            "transfers_in": transfers_in,
+            "transfers_out": transfers_out,
+            "sales": sales,
+            "expected_stock": expected_stock,
+            "actual_stock": actual_stock,
+            "variance": variance
+        })
+
+    return report
