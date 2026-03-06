@@ -8,3 +8,9 @@ class StoreViewSet(ModelViewSet):
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
 
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.role == "manager":
+    #         return Store.objects.all()
+    #     return Store.objects.filter(seller=user)
+

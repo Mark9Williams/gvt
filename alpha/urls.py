@@ -26,7 +26,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
 )
-# from reconciliation.views import ReconciliationViewSet
+from reconciliation.views import ReconciliationViewSet
 from storeassignment.views import StoreAssignmentViewSet
 from inventory.views import StoreInventoryViewSet,StockTransferViewSet
 
@@ -41,7 +41,7 @@ router.register(r'storeassignments',StoreAssignmentViewSet)
 router.register(r'storeinventory',StoreInventoryViewSet)
 router.register(r'stocktransfer',StockTransferViewSet)
 router.register(r'sales',SaleViewSet)
-# router.register(r'reconciliation',ReconciliationViewSet)
+router.register(r'reconcile',ReconciliationViewSet)
 
 urlpatterns = [
     path("api/",include(router.urls)),
