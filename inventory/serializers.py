@@ -8,6 +8,23 @@ class StoreInventorySerializer(serializers.ModelSerializer):
         model = StoreInventory
         fields = "__all__"
 
+        @transaction.Atomic
+        def create(self,validated_data):
+            store = validated_data["store"]
+            product = validated_data["product"]
+            quantity = validated_data.get("quantity",0)
+
+            inventory,created = StoreInventory.objects.select_for_update().get_or_create(
+                store = store,
+                product =  product,
+                defaults = {"quantity":quantity}
+            )
+
+            if not created:
+                inventory.quantity += quantity
+                inventory.save()
+            return inventory
+
 
 class StockTransferSerializer(serializers.ModelSerializer):
     class Meta:
