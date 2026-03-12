@@ -20,6 +20,7 @@ from brand.views import BrandViewSet
 from django.urls import path,include
 from store.views import StoreViewSet
 from product.views import ProductViewSet
+from dashboard.views import DashboardView
 from sales.views import SaleViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
@@ -45,6 +46,7 @@ router.register(r'reconcile',ReconciliationViewSet)
 
 urlpatterns = [
     path("api/",include(router.urls)),
+    path("api/dashboard/",DashboardView.as_view(),name = "dashboard"),
     path('admin/', admin.site.urls),
     path("api/token",TokenObtainPairView.as_view(), name = "token"),
     path("api/refresh",TokenRefreshView.as_view(),name = "refresh"),
